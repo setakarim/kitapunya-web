@@ -1,6 +1,9 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
@@ -9,38 +12,36 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminRole = Role::create(['name' => 'Admin']);
-        $adminPermissions = ['manage-users', 'view-users', 'create-users', 'edit-users', 'delete-users'];
-        foreach ($adminPermissions as $ap) {
-            $permission = Permission::create(['name' => $ap]);
-            $adminRole->givePermissionTo($permission);
-        }
-        $adminUser = User::create([
+        DB::table('users')->insert([
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('1234'),
+            'role_id' => 1,
+            'created_at' => Carbon::now(),
         ]);
-        $adminUser->assignRole($adminRole);
 
-        $editorRole = Role::create(['name' => 'Editor']);
-        $editorPermissions = ['manage-users', 'view-users'];
-        foreach ($editorPermissions as $ep) {
-            $permission = Permission::firstOrCreate(['name' => $ep]);
-            $editorRole->givePermissionTo($permission);
-        }
-        $editorUser = User::create([
-            'name' => 'Editor',
-            'email' => 'editor@example.com',
+        DB::table('users')->insert([
+            'name' => 'Lembaga',
+            'email' => 'lembaga@example.com',
             'password' => Hash::make('1234'),
+            'role_id' => 2,
+            'created_at' => Carbon::now(),
         ]);
-        $editorUser->assignRole($editorRole);
 
-        $userRole = Role::create(['name' => 'User']);
-        $generalUser = User::create([
-            'name' => 'User',
-            'email' => 'user@example.com',
+        DB::table('users')->insert([
+            'name' => 'Donatur',
+            'email' => 'donatur@example.com',
             'password' => Hash::make('1234'),
+            'role_id' => 3,
+            'created_at' => Carbon::now(),
         ]);
-        $generalUser->assignRole($userRole);
+
+        DB::table('users')->insert([
+            'name' => 'Driver',
+            'email' => 'driver@example.com',
+            'password' => Hash::make('1234'),
+            'role_id' => 4,
+            'created_at' => Carbon::now(),
+        ]);
     }
 }
