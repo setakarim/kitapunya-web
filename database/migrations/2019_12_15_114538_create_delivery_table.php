@@ -13,6 +13,7 @@ class CreateDeliveryTable extends Migration
     {
         Schema::create('delivery', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('no_transaksi');
             $table->unsignedBigInteger('donasi_id');
             $table->unsignedBigInteger('users_id');
             $table->timestamps();

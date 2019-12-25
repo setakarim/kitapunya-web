@@ -13,6 +13,7 @@ class CreateCampaignTable extends Migration
     {
         Schema::create('campaign', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('no_transaksi');
             $table->string('title');
             $table->string('description')->nullable();
             $table->date('time_limit');

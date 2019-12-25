@@ -29,4 +29,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
     Route::post('register', 'AuthAPIController@register');
     Route::post('changePassword', 'AuthAPIController@changePassword');
     Route::get('logout', 'AuthAPIController@logout');
+    Route::get('getUser', 'AuthAPIController@getUser');
 });

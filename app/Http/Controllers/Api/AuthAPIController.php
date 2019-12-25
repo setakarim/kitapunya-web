@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Model\Users;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,8 +20,7 @@ class AuthAPIController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'firstname' => 'required',
-            'lastname' => 'required',
+            'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
             'confirm_password' => 'required|same:password',
@@ -32,11 +31,12 @@ class AuthAPIController extends Controller
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        // $token = $user->createToken('nApp')->accessToken;
-        $success = 'Success Registered Account!';
+        $user = Users::create($input);
 
-        return response()->json(['message' => $success], 200);
+        $token = $user->createToken('kitapunya')->accessToken;
+        $message = 'Success Registered Account!';
+
+        return response()->json(['token' => $token, 'message' => $message], 200);
     }
 
     /**
@@ -58,16 +58,20 @@ class AuthAPIController extends Controller
         }
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
-            $success = 'Success Login!';
-            $token = $user->createToken($user->email)->accessToken;
-            if (auth()->user()->is_procurement) {
-                return response()->json(['access_token' => $token, 'message' => $success], 200);
-            } else {
-                return response()->json(['error' => 'Account Invalid'], 401);
-            }
+            $token = $user->createToken('kitapunya')->accessToken;
+            $message = 'Login Success!';
+
+            return response()->json(['token' => $token, 'message' => $message], 200);
         } else {
             return response()->json(['error' => 'Email or Password Invalid'], 401);
         }
+    }
+
+    public function getUser()
+    {
+        $user = Users::find(auth('api')->user()->id);
+
+        return response()->json(['data' => $user], 200);
     }
 
     /**
@@ -79,9 +83,9 @@ class AuthAPIController extends Controller
      */
     public function changePassword(Request $request)
     {
-        $user = User::find(auth('api')->user()->id);
+        $user = Users::find(auth('api')->user()->id);
         if (Hash::check($request->oldPassword, $user->password)) {
-            $user->update(['password' => Hash::make($request->password)]);
+            $user->update(['password' => Hash::make($request->newPassword)]);
             $response = [
                 'status' => 'Success',
                 'message' => 'Successfully Password Changed',
@@ -105,7 +109,7 @@ class AuthAPIController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        auth('api')->user()->token()->revoke();
 
         return response()->json([
             'message' => 'Successfully logged out',

@@ -13,6 +13,7 @@ class CreateDonasiTable extends Migration
     {
         Schema::create('donasi', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('no_transaksi');
             $table->tinyInteger('status')->default(0);
             $table->string('location')->nullable();
             $table->string('long')->nullable();
