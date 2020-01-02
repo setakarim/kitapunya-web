@@ -15,7 +15,7 @@ class CreateCampaignTable extends Migration
             $table->bigIncrements('id');
             $table->string('no_transaksi');
             $table->string('title');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->date('time_limit');
             $table->string('path_image')->nullable();
             $table->string('location')->nullable();

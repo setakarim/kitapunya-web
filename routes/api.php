@@ -30,4 +30,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
     Route::post('changePassword', 'AuthAPIController@changePassword');
     Route::get('logout', 'AuthAPIController@logout');
     Route::get('getUser', 'AuthAPIController@getUser');
+
+    //Campaign
+    Route::group(['prefix' => 'campaign'], function () {
+        Route::get('/', 'CampaignAPIController@index');
+        Route::get('/getCurrent', 'CampaignAPIController@getCurrent');
+        Route::get('/getCategory/{id}', 'CampaignAPIController@getCategory');
+    });
 });

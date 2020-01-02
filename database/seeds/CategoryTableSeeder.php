@@ -12,28 +12,11 @@ class CategoryTableSeeder extends Seeder
     public function run()
     {
         DB::table('category')->insert([
-            'name' => 'Bencana Alam',
-            'created_at' => Carbon::now(),
-        ]);
-
-        DB::table('category')->insert([
-            'name' => 'Rumah Ibadah',
-            'created_at' => Carbon::now(),
-        ]);
-
-        DB::table('category')->insert([
-            'name' => 'Pendidikan',
-            'created_at' => Carbon::now(),
-        ]);
-
-        DB::table('category')->insert([
-            'name' => 'Panti Asuhan',
-            'created_at' => Carbon::now(),
-        ]);
-
-        DB::table('category')->insert([
-            'name' => 'Personal',
-            'created_at' => Carbon::now(),
+            ['name' => 'Bencana Alam', 'created_at' => Carbon::now()],
+            ['name' => 'Rumah Ibadah', 'created_at' => Carbon::now()],
+            ['name' => 'Pendidikan', 'created_at' => Carbon::now()],
+            ['name' => 'Panti Asuhan', 'created_at' => Carbon::now()],
+            ['name' => 'Personal', 'created_at' => Carbon::now()],
         ]);
     }
 }

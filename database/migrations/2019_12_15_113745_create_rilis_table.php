@@ -14,7 +14,7 @@ class CreateRilisTable extends Migration
         Schema::create('rilis', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('campaign_id');
             $table->timestamps();
         });

@@ -23,11 +23,10 @@ class AuthAPIController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            'confirm_password' => 'required|same:password',
         ]);
-        $errors = $validator->errors()->toArray();
+        $errors = $validator->errors();
         if ($validator->fails()) {
-            return response()->json(array('errors' => $errors), 401);
+            return response()->json(['error' => $errors], 401);
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
