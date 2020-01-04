@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Campaign\CampaignResource;
+use App\Http\Resources\Campaign\DetailCampaignResource;
 use App\Model\Campaign;
 use Illuminate\Http\Request;
 
@@ -27,9 +29,9 @@ class CampaignAPIController extends Controller
      */
     public function getCurrent()
     {
-        $campaign = Campaign::all()->sortByDesc('id')->take(5);
+        $query = Campaign::all()->sortByDesc('id')->take(5);
 
-        return response()->json($campaign, 200);
+        return CampaignResource::collection($query);
     }
 
     /**
@@ -42,12 +44,12 @@ class CampaignAPIController extends Controller
     public function getCategory($id)
     {
         if ($id == 0) {
-            $campaign = Campaign::all();
+            $query = Campaign::all();
         } else {
-            $campaign = Campaign::where('category_id', $id)->get();
+            $query = Campaign::where('category_id', $id)->get();
         }
 
-        return response()->json($campaign, 200);
+        return CampaignResource::collection($query);
     }
 
     /**
@@ -79,6 +81,9 @@ class CampaignAPIController extends Controller
      */
     public function show($id)
     {
+        $query = Campaign::find($id);
+
+        return new DetailCampaignResource($query);
     }
 
     /**

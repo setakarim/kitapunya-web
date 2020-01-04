@@ -26,6 +26,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
      */
 
     Route::post('login', 'AuthAPIController@login');
+    Route::post('loginAsDonatur', 'AuthAPIController@loginAsDonatur');
+    Route::post('loginAsDriver', 'AuthAPIController@loginAsDriver');
     Route::post('register', 'AuthAPIController@register');
     Route::post('changePassword', 'AuthAPIController@changePassword');
     Route::get('logout', 'AuthAPIController@logout');
@@ -36,5 +38,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
         Route::get('/', 'CampaignAPIController@index');
         Route::get('/getCurrent', 'CampaignAPIController@getCurrent');
         Route::get('/getCategory/{id}', 'CampaignAPIController@getCategory');
+        Route::get('/getDetail/{id}', 'CampaignAPIController@show');
     });
 });

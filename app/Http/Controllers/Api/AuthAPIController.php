@@ -66,6 +66,74 @@ class AuthAPIController extends Controller
         }
     }
 
+    /**
+     * Login API.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function loginAsDonatur(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            $user = Auth::user();
+            $token = $user->createToken('kitapunya')->accessToken;
+            $message = 'Login Success!';
+
+            $users = Users::find($user->id);
+
+            if ($users['role_id'] == 3) {
+                return response()->json(['token' => $token, 'message' => $message], 200);
+            } else {
+                return response()->json(['error' => 'Email or Password Invalid'], 401);
+            }
+        } else {
+            return response()->json(['error' => 'Email or Password Invalid'], 401);
+        }
+    }
+
+    /**
+     * Login API.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function loginAsDriver(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            $user = Auth::user();
+            $token = $user->createToken('kitapunya')->accessToken;
+            $message = 'Login Success!';
+
+            $users = Users::find($user->id);
+
+            if ($users['role_id'] == 4) {
+                return response()->json(['token' => $token, 'message' => $message], 200);
+            } else {
+                return response()->json(['error' => 'Email or Password Invalid'], 401);
+            }
+        } else {
+            return response()->json(['error' => 'Email or Password Invalid'], 401);
+        }
+    }
+
     public function getUser()
     {
         $user = Users::find(auth('api')->user()->id);
