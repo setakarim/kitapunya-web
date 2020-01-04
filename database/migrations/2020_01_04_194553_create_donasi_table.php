@@ -22,6 +22,9 @@ class CreateDonasiTable extends Migration
             $table->unsignedBigInteger('campaign_id');
             $table->unsignedBigInteger('users_id');
             $table->timestamps();
+
+            $table->foreign('campaign_id')->on('campaign')->references('id')->onDelete('cascade');
+            $table->foreign('users_id')->on('users')->references('id')->onDelete('cascade');
         });
     }
 

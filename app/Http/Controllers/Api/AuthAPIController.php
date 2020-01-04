@@ -152,7 +152,7 @@ class AuthAPIController extends Controller
     {
         $user = Users::find(auth('api')->user()->id);
         if (Hash::check($request->oldPassword, $user->password)) {
-            $user->update(['password' => Hash::make($request->newPassword)]);
+            $user->update(['password' => Hash::make($request->password)]);
             $response = [
                 'status' => 'Success',
                 'message' => 'Successfully Password Changed',

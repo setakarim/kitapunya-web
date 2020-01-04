@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Donasi;
 
+use App\Model\DetailDonasi;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DonaturResource extends JsonResource
@@ -26,11 +27,13 @@ class DonaturResource extends JsonResource
             $avatar_url = $this->Users->path_photo;
         }
 
+        $detail_donasi = DetailDonasi::where('donasi_id', $this->id)->get();
+
         return [
             'id' => $this->id,
             'name' => $donatur_name,
             'image_url' => $avatar_url,
-            'barang' => DetailDonasiResource::collection($this->BarangCampaign),
+            'barang' => DetailDonasiResource::collection($detail_donasi),
         ];
     }
 }

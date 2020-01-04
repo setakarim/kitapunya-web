@@ -25,6 +25,9 @@ class CreateCampaignTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('users_id');
             $table->timestamps();
+
+            $table->foreign('category_id')->on('category')->references('id')->onDelete('cascade');
+            $table->foreign('users_id')->on('users')->references('id')->onDelete('cascade');
         });
     }
 

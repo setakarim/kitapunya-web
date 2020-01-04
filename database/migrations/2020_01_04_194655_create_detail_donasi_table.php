@@ -18,6 +18,9 @@ class CreateDetailDonasiTable extends Migration
             $table->unsignedBigInteger('donasi_id');
             $table->unsignedBigInteger('barang_campaign_id');
             $table->timestamps();
+
+            $table->foreign('donasi_id')->on('donasi')->references('id')->onDelete('cascade');
+            $table->foreign('barang_campaign_id')->on('barang_campaign')->references('id')->onDelete('cascade');
         });
     }
 

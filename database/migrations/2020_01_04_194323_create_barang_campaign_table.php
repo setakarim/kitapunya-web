@@ -18,6 +18,9 @@ class CreateBarangCampaignTable extends Migration
             $table->unsignedBigInteger('barang_id');
             $table->unsignedBigInteger('campaign_id');
             $table->timestamps();
+
+            $table->foreign('barang_id')->on('barang')->references('id')->onDelete('cascade');
+            $table->foreign('campaign_id')->on('campaign')->references('id')->onDelete('cascade');
         });
     }
 

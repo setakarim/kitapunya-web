@@ -40,4 +40,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
         Route::get('/getCategory/{id}', 'CampaignAPIController@getCategory');
         Route::get('/getDetail/{id}', 'CampaignAPIController@show');
     });
+
+    //Donasi
+    Route::group(['prefix' => 'donasi'], function () {
+        Route::get('/', 'DonasiApiController@index');
+        Route::get('/getHistory', 'DonasiApiController@getHistory');
+        Route::get('/getHistoryDetail/{id}', 'DonasiApiController@show');
+    });
 });

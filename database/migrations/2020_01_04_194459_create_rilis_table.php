@@ -17,6 +17,8 @@ class CreateRilisTable extends Migration
             $table->text('description')->nullable();
             $table->unsignedBigInteger('campaign_id');
             $table->timestamps();
+
+            $table->foreign('campaign_id')->on('campaign')->references('id')->onDelete('cascade');
         });
     }
 
