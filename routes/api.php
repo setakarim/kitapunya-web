@@ -47,5 +47,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
         Route::get('/', 'DonasiApiController@index');
         Route::get('/getHistory', 'DonasiApiController@getHistory');
         Route::get('/getHistoryDetail/{id}', 'DonasiApiController@show');
+        Route::post('/', 'DonasiApiController@store');
     });
 });

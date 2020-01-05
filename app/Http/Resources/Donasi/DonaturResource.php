@@ -17,14 +17,15 @@ class DonaturResource extends JsonResource
     public function toArray($request)
     {
         $donatur_name = '';
-        $avatar_url = '';
+        $avatar_url = null;
 
         if ($this->anonim > 0) {
             $donatur_name = 'Anonim';
-            $avatar_url = null;
         } else {
             $donatur_name = $this->Users->name;
-            $avatar_url = 'http://192.168.0.10:8000/uploads/profile/'.$this->Users->file_name;
+            if ($this->Users->file_name != null) {
+                $avatar_url = 'http://192.168.0.10:8000/uploads/profile/'.$this->Users->file_name;
+            }
         }
 
         $detail_donasi = DetailDonasi::where('donasi_id', $this->id)->get();

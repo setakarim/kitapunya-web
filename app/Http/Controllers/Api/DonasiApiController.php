@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DonaturHistory\DetailHistoryResource;
 use App\Http\Resources\DonaturHistory\HistoryResource;
+use App\Model\BarangCampaign;
+use App\Model\DetailDonasi;
 use App\Model\Donasi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DonasiApiController extends Controller
 {
@@ -52,6 +57,66 @@ class DonasiApiController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'id' => 'required',
+            'location' => 'required',
+            'anonim' => 'required',
+            'items' => 'required',
+            'items.*.id' => 'required',
+            'items.*.file' => 'required',
+            'items.*.qty' => 'required|not_in:0',
+        ]);
+
+        $user_id = auth('api')->user()->id;
+
+        foreach ($request->items as $item) {
+            $barangCampaign = BarangCampaign::find($item['id']);
+            $sisa = $barangCampaign->max_qty - $barangCampaign->real_qty;
+
+            if ($item['qty'] > $sisa) {
+                return response()->json(['error' => 'Barang yang disumbangkan tidak boleh melebihi kapasitas'], 401);
+            }
+        }
+
+        $donasi = Donasi::create([
+            'no_transaksi' => $this->generateNoTrx(),
+            'status' => 1,
+            'location' => $request->location,
+            'long' => $request->long,
+            'lat' => $request->lat,
+            'anonim' => $request->anonim,
+            'users_id' => $user_id,
+            'campaign_id' => $request->id,
+            'created_at' => Carbon::now(),
+        ]);
+
+        foreach ($request->items as $item) {
+            if ($item['file']) {
+                $file = $item['file'];
+                @list($type, $file_data) = explode(';', $file);
+                @list(, $file_data) = explode(',', $file_data);
+                $file_name = $this->generateFileName($item['id']).'.'.explode('/', explode(':', substr($file, 0, strpos($file, ';')))[1])[1];
+                Storage::disk('public')->put('detail_donasi/'.$file_name, base64_decode($file_data), 'public');
+            } else {
+                $file_name = '';
+            }
+
+            $detailDonasi[] = [
+                'qty' => $item['qty'],
+                'file_name' => $file_name,
+                'donasi_id' => $donasi->id,
+                'barang_campaign_id' => $item['id'],
+                'created_at' => Carbon::now(),
+            ];
+
+            $barangCampaign = BarangCampaign::find($item['id']);
+            $barangCampaign->real_qty = $barangCampaign->real_qty + $item['qty'];
+            $barangCampaign->updated_at = Carbon::now();
+            $barangCampaign->save();
+        }
+        DetailDonasi::insert($detailDonasi);
+
+        return response()->json(['message' => 'Success'], 200);
     }
 
     /**
@@ -100,5 +165,29 @@ class DonasiApiController extends Controller
      */
     public function destroy($id)
     {
+    }
+
+    /**
+     * @return string
+     */
+    public function generateNoTrx()
+    {
+        $year_month = Carbon::now()->format('ym');
+        $latest_donasi = Donasi::where(DB::raw("DATE_FORMAT(created_at, '%y%m')"), $year_month)->latest()->first();
+        $get_last_donasi_no = isset($latest_donasi->sales_order_no) ? $latest_donasi->sales_order_no : 'DON'.$year_month.'00000';
+        $cut_string_donasi = str_replace('DON', '', $get_last_donasi_no);
+
+        return 'DON'.($cut_string_donasi + 1);
+    }
+
+    /**
+     * @return string
+     */
+    public function generateFileName($id)
+    {
+        $date = Carbon::now()->toDateString();
+        $clock = Carbon::now()->toTimeString();
+
+        return 'detail_donasi_id_'.$id.'_'.$date.'_'.$clock;
     }
 }
