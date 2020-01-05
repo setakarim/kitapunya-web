@@ -24,7 +24,7 @@ class DonaturResource extends JsonResource
             $avatar_url = null;
         } else {
             $donatur_name = $this->Users->name;
-            $avatar_url = $this->Users->path_photo;
+            $avatar_url = 'http://192.168.0.10:8000/uploads/profile/'.$this->Users->file_name;
         }
 
         $detail_donasi = DetailDonasi::where('donasi_id', $this->id)->get();

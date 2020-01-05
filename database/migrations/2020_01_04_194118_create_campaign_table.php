@@ -17,7 +17,7 @@ class CreateCampaignTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->date('time_limit');
-            $table->string('path_image')->nullable();
+            $table->string('file_name')->nullable();
             $table->string('location')->nullable();
             $table->string('long')->nullable();
             $table->string('lat')->nullable();

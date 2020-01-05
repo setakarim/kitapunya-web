@@ -8,7 +8,7 @@ class Campaign extends Model
 {
     protected $table = 'campaign';
 
-    protected $fillable = ['no_transaksi', 'title', 'description', 'time_limit', 'path_image', 'location', 'long', 'lat', 'status',  'category_id', 'users_id', 'created_at', 'updated_at'];
+    protected $fillable = ['no_transaksi', 'title', 'description', 'time_limit', 'file_name', 'location', 'long', 'lat', 'status',  'category_id', 'users_id', 'created_at', 'updated_at'];
 
     public function Category()
     {

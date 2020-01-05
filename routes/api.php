@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
     Route::post('loginAsDriver', 'AuthAPIController@loginAsDriver');
     Route::post('register', 'AuthAPIController@register');
     Route::post('changePassword', 'AuthAPIController@changePassword');
+    Route::post('updateProfile', 'AuthAPIController@updateProfile');
     Route::get('logout', 'AuthAPIController@logout');
     Route::get('getUser', 'AuthAPIController@getUser');
 

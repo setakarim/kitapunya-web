@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UsersResource;
 use App\Model\Users;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AuthAPIController extends Controller
@@ -136,9 +139,9 @@ class AuthAPIController extends Controller
 
     public function getUser()
     {
-        $user = Users::find(auth('api')->user()->id);
+        $query = Users::find(auth('api')->user()->id);
 
-        return response()->json(['data' => $user], 200);
+        return new UsersResource($query);
     }
 
     /**
@@ -165,6 +168,53 @@ class AuthAPIController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    /**
+     * Update Profile.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Users::find(auth('api')->user()->id);
+
+        if ($request->file) {
+            $file = $request->file;
+            @list($type, $file_data) = explode(';', $file);
+            @list(, $file_data) = explode(',', $file_data);
+            $file_name = $this->generateFileName(auth('api')->user()->id).'.'.explode('/', explode(':', substr($file, 0, strpos($file, ';')))[1])[1];
+            Storage::disk('public')->put('profile/'.$file_name, base64_decode($file_data), 'public');
+        } else {
+            $file_name = '';
+        }
+
+        if ($request->name != '') {
+            $user->name = $request->name;
+        }
+        if ($request->email != '') {
+            $user->email = $request->email;
+        }
+        if ($request->file) {
+            $user->file_name = $file_name;
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'Change Profile Success'], 200);
+    }
+
+    /**
+     * @return string
+     */
+    public function generateFileName($id)
+    {
+        $date = Carbon::now()->toDateString();
+        $clock = Carbon::now()->toTimeString();
+
+        return 'profile_id_'.$id.'_'.$date.'_'.$clock;
     }
 
     /**

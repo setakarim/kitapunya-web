@@ -38,7 +38,7 @@ class DetailCampaignResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'image_url' => $this->path_image,
+            'image_url' => $this->file_name,
             'day' => $day->days,
             'percent' => $percent,
             'campaigner' => $this->Users->name,

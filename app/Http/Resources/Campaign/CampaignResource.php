@@ -30,7 +30,7 @@ class CampaignResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => Str::limit((string) $this->description, 100),
-            'image_url' => $this->path_image,
+            'image_url' => $this->file_name,
             'day' => $day->days,
             'percent' => $percent,
         ];

@@ -8,7 +8,7 @@ class DetailDonasi extends Model
 {
     protected $table = 'detail_donasi';
 
-    protected $fillable = ['qty', 'path_photo', 'donasi_id', 'barang_campaign_id', 'created_at', 'updated_at'];
+    protected $fillable = ['qty', 'file_name', 'donasi_id', 'barang_campaign_id', 'created_at', 'updated_at'];
 
     public function Donasi()
     {

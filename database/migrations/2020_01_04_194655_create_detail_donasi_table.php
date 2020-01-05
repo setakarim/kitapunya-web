@@ -14,7 +14,7 @@ class CreateDetailDonasiTable extends Migration
         Schema::create('detail_donasi', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('qty')->default(0);
-            $table->string('path_photo')->nullable();
+            $table->string('file_name')->nullable();
             $table->unsignedBigInteger('donasi_id');
             $table->unsignedBigInteger('barang_campaign_id');
             $table->timestamps();
