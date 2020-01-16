@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DonaturHistory\DetailHistoryResource;
 use App\Http\Resources\DonaturHistory\HistoryResource;
+use App\Http\Resources\Driver\ListDonasiResource;
 use App\Model\BarangCampaign;
 use App\Model\DetailDonasi;
 use App\Model\Donasi;
@@ -37,6 +38,22 @@ class DonasiApiController extends Controller
         $query = Donasi::where('users_id', auth('api')->user()->id)->get();
 
         return HistoryResource::collection($query);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getDonation(Request $request)
+    {
+        $request->validate([
+            'status' => 'required',
+        ]);
+
+        $query = Donasi::where('status', $request->status)->get();
+
+        return ListDonasiResource::collection($query);
     }
 
     /**
@@ -174,7 +191,7 @@ class DonasiApiController extends Controller
     {
         $year_month = Carbon::now()->format('ym');
         $latest_donasi = Donasi::where(DB::raw("DATE_FORMAT(created_at, '%y%m')"), $year_month)->latest()->first();
-        $get_last_donasi_no = isset($latest_donasi->sales_order_no) ? $latest_donasi->sales_order_no : 'DON'.$year_month.'00000';
+        $get_last_donasi_no = isset($latest_donasi->no_transaksi) ? $latest_donasi->no_transaksi : 'DON'.$year_month.'00000';
         $cut_string_donasi = str_replace('DON', '', $get_last_donasi_no);
 
         return 'DON'.($cut_string_donasi + 1);

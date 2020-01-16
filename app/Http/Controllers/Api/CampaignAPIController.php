@@ -29,7 +29,8 @@ class CampaignAPIController extends Controller
      */
     public function getCurrent()
     {
-        $query = Campaign::all()->sortByDesc('id')->take(5);
+        $query = Campaign::where('status', '<', 2)->get();
+        $query = $query->sortByDesc('id')->take(5);
 
         return CampaignResource::collection($query);
     }
@@ -44,9 +45,9 @@ class CampaignAPIController extends Controller
     public function getCategory($id)
     {
         if ($id == 0) {
-            $query = Campaign::all();
+            $query = Campaign::where('status', '<', 2)->get();
         } else {
-            $query = Campaign::where('category_id', $id)->get();
+            $query = Campaign::where('status', '<', 2)->where('category_id', $id)->get();
         }
 
         return CampaignResource::collection($query);

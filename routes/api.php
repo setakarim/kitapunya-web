@@ -45,8 +45,18 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
     //Donasi
     Route::group(['prefix' => 'donasi'], function () {
         Route::get('/', 'DonasiApiController@index');
-        Route::get('/getHistory', 'DonasiApiController@getHistory');
-        Route::get('/getHistoryDetail/{id}', 'DonasiApiController@show');
         Route::post('/', 'DonasiApiController@store');
+        Route::get('/getHistory', 'DonasiApiController@getHistory');
+        Route::get('/getDonation', 'DonasiApiController@getDonation');
+        Route::get('/getHistoryDetail/{id}', 'DonasiApiController@show');
+    });
+
+    //Delivery
+    Route::group(['prefix' => 'delivery'], function () {
+        Route::get('/', 'DeliveryAPIController@index');
+        Route::post('/', 'DeliveryAPIController@store');
+        Route::get('/getDelivery', 'DeliveryAPIController@getDelivery');
+        Route::get('/getHistory', 'DeliveryAPIController@getHistory');
+        Route::get('/getHistoryDetail/{id}', 'DeliveryAPIController@show');
     });
 });
