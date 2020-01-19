@@ -24,7 +24,6 @@ class DonaturResource extends JsonResource
         } else {
             $donatur_name = $this->Users->name;
             if ($this->Users->file_name != null) {
-                // $avatar_url = 'http://192.168.1.23:8000/uploads/profile/'.$this->Users->file_name;
                 $avatar_url = 'http://kitapunya.setakarim.xyz/uploads/profile/'.$this->Users->file_name;
             }
         }

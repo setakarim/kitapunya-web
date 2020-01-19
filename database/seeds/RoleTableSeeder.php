@@ -18,8 +18,8 @@ class RoleTableSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'name' => 'Lembaga',
-                'description' => 'Lembaga',
+                'name' => 'Campaigner',
+                'description' => 'Campaigner',
                 'created_at' => Carbon::now(),
             ],
             [

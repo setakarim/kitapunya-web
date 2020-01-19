@@ -34,17 +34,26 @@ class DetailCampaignResource extends JsonResource
         $barang = BarangCampaign::where('campaign_id', $this->id)->get();
         $donatur = Donasi::where('campaign_id', $this->id)->get();
 
+        $image_url = null;
+
+        if ($this->file_name != null) {
+            $image_url = 'http://kitapunya.setakarim.xyz/uploads/campaign/'.$this->file_name;
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'image_url' => $this->file_name,
+            'image_url' => $image_url,
             'day' => $day->days,
             'percent' => $percent,
             'campaigner' => $this->Users->name,
             'barang' => BarangDonasiResource::collection($barang),
             'donatur' => DonaturResource::collection($donatur),
-            'rilis' => $rilis['description'],
+            'rilis' => [
+                'title' => $rilis['title'],
+                'description' => $rilis['description'],
+            ],
         ];
     }
 }

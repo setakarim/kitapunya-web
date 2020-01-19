@@ -18,7 +18,6 @@ class UsersResource extends JsonResource
         $path_photo = null;
 
         if ($this->file_name != null) {
-            // $path_photo = 'http://192.168.1.23:8000/uploads/profile/'.$this->file_name;
             $path_photo = 'http://kitapunya.setakarim.xyz/uploads/profile/'.$this->file_name;
         }
 

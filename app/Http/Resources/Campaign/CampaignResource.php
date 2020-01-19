@@ -26,11 +26,17 @@ class CampaignResource extends JsonResource
         $limit = $time_limit->diff($created_at);
         $percent = 1 - $day->days / $limit->days;
 
+        $image_url = null;
+
+        if ($this->file_name != null) {
+            $image_url = 'http://kitapunya.setakarim.xyz/uploads/campaign/'.$this->file_name;
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => Str::limit((string) $this->description, 100),
-            'image_url' => $this->file_name,
+            'image_url' => $image_url,
             'day' => $day->days,
             'percent' => $percent,
         ];

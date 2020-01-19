@@ -37,9 +37,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
     //Campaign
     Route::group(['prefix' => 'campaign'], function () {
         Route::get('/', 'CampaignAPIController@index');
+        Route::post('/', 'CampaignAPIController@store');
         Route::get('/getCurrent', 'CampaignAPIController@getCurrent');
         Route::get('/getCategory/{id}', 'CampaignAPIController@getCategory');
         Route::get('/getDetail/{id}', 'CampaignAPIController@show');
+        Route::post('/postRelease', 'CampaignAPIController@storeRelease');
     });
 
     //Donasi
@@ -49,6 +51,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\\'], function () {
         Route::get('/getHistory', 'DonasiApiController@getHistory');
         Route::get('/getDonation', 'DonasiApiController@getDonation');
         Route::get('/getHistoryDetail/{id}', 'DonasiApiController@show');
+        Route::post('/updateStatus', 'DonasiApiController@updateStatus');
     });
 
     //Delivery

@@ -165,6 +165,26 @@ class DonasiApiController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+        ]);
+
+        Donasi::find($request->id)->update(['status' => 2]);
+
+        $donasi = Donasi::find($request->id);
+
+        return response()->json(['message' => 'Success', 'donasi' => $donasi], 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
      * @param int                      $id
      *
      * @return \Illuminate\Http\Response
